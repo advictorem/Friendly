@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="gutter relative bg-black pb-4 pt-24 sm:pt-36">
       <div className="flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
         <div>
-          <RevealLines as="h2" className="display text-[clamp(44px,7.2vw,124px)] text-white" lines={['Let’s make', 'something great.']} />
+          <RevealLines as="h2" className="display flat text-[clamp(44px,7.2vw,124px)] text-white" lines={['Let’s make', 'something great.']} />
           <div className="mt-8 flex flex-wrap gap-3">
             <a href={site.phoneHref} className="pill">Book a call <span className="pill-icon" aria-hidden="true">→</span></a>
             <a href={site.emailHref} className="pill">Drop a line <span className="pill-icon" aria-hidden="true">@</span></a>
