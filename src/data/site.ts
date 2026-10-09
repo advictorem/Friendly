@@ -7,7 +7,8 @@ export const site = {
   instagram: 'https://www.instagram.com/friendlyfilmworks/',
   vimeo: 'https://vimeo.com/friendlyfilmworks',
   linkedin: 'https://www.linkedin.com/in/ara-soudjian-779459112/',
-  copyright: '©2026 Friendly Entertainment Inc. All Rights Reserved. Founded by Ara Soudjian',
+  copyright: '©2026 Friendly Entertainment Inc. All Rights Reserved. Founded by',
+  founder: { label: 'Ara Soudjian', href: 'https://arasoudjian.com/' },
   credit: { label: 'Ad Victorem', href: 'https://advictorem.agency' },
   about: {
     videos: [

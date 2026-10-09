@@ -7,7 +7,7 @@ import { RevealLines } from './Reveal'
 export function Credits({ className = '' }: { className?: string }) {
   return (
     <div className={`flex flex-col gap-2 text-xs text-mute sm:flex-row sm:items-end sm:justify-between ${className}`}>
-      <p>{site.copyright}</p>
+      <p>{site.copyright} <a href={site.founder.href} target="_blank" rel="noreferrer" className="line-link text-soft hover:text-white">{site.founder.label}</a></p>
       <p>Site by <a href={site.credit.href} target="_blank" rel="noreferrer" className="line-link text-soft hover:text-white">{site.credit.label}</a></p>
     </div>
   )

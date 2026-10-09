@@ -45,13 +45,14 @@ All repeated content is data, in `src/data/`:
 
 **Credits.** Case-study credits render only when a value is set. Leave a field undefined until it is confirmed; the page skips it rather than showing a placeholder.
 
-**Client logos.** Add a white SVG (transparent background) to `public/images/logos/` and set `logo: asset('images/logos/<file>.svg')` in `clients.ts`. Clients without a logo are not shown.
+**Client logos.** Add a white, transparent logo to `public/images/logos/` and add a row to `clients.ts` with its width ÷ height. Clients without a logo are not shown.
 
 ## Assets
 
 - Supplied files (logo, team portraits, contact photo, Creative Visionaries still) are in `public/images/`, converted to WebP.
 - Portfolio thumbnails load from the Vimeo CDN at 960px, falling back to the copy on friendlyfilmworks.com.
-- Case-study stills and three client logos load from friendlyfilmworks.com.
+- Client logos are in `public/images/logos/` (Gibson's still loads from friendlyfilmworks.com).
+- Case-study stills load from friendlyfilmworks.com.
 - Before the old site is retired, run `npm run assets:fetch`. It downloads every remote image and writes `src/data/asset-manifest.json`; `src/data/assets.ts` then serves the local copies automatically.
 
 ## Vimeo previews and playback

@@ -32,9 +32,9 @@ export default function Header() {
 
   return (
     <>
-      <header className="gutter pointer-events-none fixed inset-x-0 top-0 z-50 flex h-[72px] items-center justify-between bg-gradient-to-b from-black/70 to-transparent">
+      <header className="gutter pointer-events-none fixed inset-x-0 top-0 z-50 flex h-[84px] items-center md:h-[116px] justify-between bg-gradient-to-b from-black/70 to-transparent">
         <Link to="/" aria-label="Friendly Entertainment — home" className="pointer-events-auto block transition-opacity duration-300 hover:opacity-70">
-          <img src={asset('images/ff-logo.svg')} alt="Friendly Entertainment" width={52} height={45} className="h-[44px] w-auto" />
+          <img src={asset('images/ff-logo.svg')} alt="Friendly Entertainment" width={102} height={88} className="h-[60px] w-auto md:h-[88px]" />
         </Link>
 
         <nav aria-label="Primary" className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 gap-8 md:flex">

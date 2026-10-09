@@ -22,7 +22,7 @@ export default function FitText({ children, className = '' }: { children: string
 
   return (
     <div ref={box} className={`w-full overflow-hidden ${className}`}>
-      <span ref={text} className="display inline-block whitespace-nowrap leading-[0.82]">{children}</span>
+      <span ref={text} className="display inline-block whitespace-nowrap pt-[0.09em] leading-[0.82]">{children}</span>
     </div>
   )
 }

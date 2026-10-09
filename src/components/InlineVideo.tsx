@@ -1,26 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { vimeoThumb } from '../data/assets'
-import { canHover } from '../hooks/motion'
+import { prefersReducedMotion } from '../hooks/motion'
 import { useVideo } from './VideoContext'
 import VideoPreview from './VideoPreview'
 
-/** A small film frame set inline with display type. Hover previews it, click opens the full video. */
+/**
+ * A wide film frame set inline with display type. It plays muted on a loop as soon as it is on screen
+ * (never with sound), pauses when scrolled away or while the lightbox is open, and opens the full video on click.
+ */
 export default function InlineVideo({ vimeoId, title, thumbKey }: { vimeoId: string; title: string; thumbKey: string }) {
-  const { activePreview, setActivePreview, openModal, modal } = useVideo()
-  const [hovered, setHovered] = useState(false)
-  const id = 'inline-' + vimeoId
-  const active = activePreview === id && !modal
+  const { openModal, modal } = useVideo()
+  const ref = useRef<HTMLButtonElement>(null)
+  const [onScreen, setOnScreen] = useState(false)
+
+  useEffect(() => {
+    if (!ref.current || prefersReducedMotion()) return
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { rootMargin: '200px 0px' })
+    io.observe(ref.current)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <button
+      ref={ref}
       type="button"
       aria-label={`Play ${title}`}
       onClick={() => openModal({ vimeoId, title })}
-      onMouseEnter={() => { if (canHover()) { setHovered(true); setActivePreview(id) } }}
-      onMouseLeave={() => { setHovered(false); setActivePreview(null) }}
-      className="relative mx-[0.12em] inline-block h-[0.74em] w-[1.32em] translate-y-[0.02em] overflow-hidden rounded-[0.09em] bg-card align-baseline"
+      className="relative mx-[0.12em] inline-block h-[0.74em] w-[1.8em] translate-y-[0.02em] overflow-hidden rounded-[0.09em] bg-card align-baseline"
     >
-      <img src={vimeoThumb(thumbKey, 640)} alt="" loading="lazy" className={`absolute inset-0 h-full w-full object-cover transition-[filter] duration-700 ease-cine ${hovered ? 'grayscale-0' : 'grayscale'}`} />
-      {active && <VideoPreview vimeoId={vimeoId} cover="h-[102%] w-[102%]" />}
+      <img src={vimeoThumb(thumbKey, 960)} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      {onScreen && !modal && <VideoPreview vimeoId={vimeoId} loopSeconds={0} cover="h-[140%] w-[102%]" />}
     </button>
   )
 }

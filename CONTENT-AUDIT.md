@@ -22,10 +22,18 @@ Vimeo returns no poster or duration for these four, which usually means embeddin
 ### Hover previews
 Previews use Vimeo's background player rather than stored clips, so there are no missing preview files. Background mode depends on the Vimeo account plan; where Vimeo declines it, the tile keeps its black-and-white to colour transition and shows no motion.
 
-### Missing client logos (11)
-The original site carries white SVGs for Nike, Gibson and LAFC only. Still needed, as white SVG or transparent PNG:
+### Client logos
+Nineteen logos are shown on the About page: eighteen supplied as white PNGs on 2026-10-09 and Gibson's SVG from the original site.
 
-Metro, AT&T, Glowforge, Motiv, Kevani, Sauro, Madani, Kennedy Center Honors, Beyond Belief, Serj Tankian, System of a Down
+- Six supplied logos are for clients with no project in the imported portfolio: Warner Bros. Records, Sony Music, Live Nation, California Lottery, XYZ Films, VTA.
+- **Serj Tankian** is in the portfolio and has no logo, so he is not shown.
+- Nineteen logos leave one empty cell in the five-column grid; a twentieth would close it.
+
+### Awards
+The About page shows three award marks: The Webby Awards, Hermes Creative Awards and The Communicator Awards.
+
+- Logos are from each organisation's own site. Webby and Communicator are stored in `public/images/awards/`; the Hermes logo still loads from hermesawards.com and needs a local copy before launch.
+- No award category, level or year is shown, because none has been supplied. Add them in `src/data/awards.ts`.
 
 ### Credits not yet verified
 Director, cinematographer and year are unset for all three case studies. The brief's values (Ara Soudjian, Garen Mirzaian, 2025) were given as template examples, so they are not shown. Production and client are shown.
@@ -40,7 +48,7 @@ Director, cinematographer and year are unset for all three case studies. The bri
 - **Gibson carousel:** the source page has no stills, so the carousel uses poster frames from the seven campaign films.
 - **LAFC carousel:** ten stills at 1024×683 from the source page. The wide banner image on that page is not used.
 - **Thumbnails:** 33 tiles use Vimeo's 960px poster. Nine use the original site's image: five custom stills (rows 1, 2, 3, 10, 42) and four for which Vimeo exposes no poster (640px).
-- **Third team member:** placeholder name and portrait, as supplied.
+- **Third team member:** placeholder name and portrait, approved for staging.
 
 ### Featured links from the grid
 Tiles whose video appears on the Gibson or LAFC case-study page carry a "View project" link. No portfolio tile belongs to Toma El Juego (it has no video), so that case study is reached from the Our Work page and from the other case studies.
