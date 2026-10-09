@@ -32,7 +32,7 @@ Nineteen logos are shown on the About page: eighteen supplied as white PNGs on 2
 ### Awards
 The About page shows three award marks: The Webby Awards, Hermes Creative Awards and The Communicator Awards.
 
-- Logos are from each organisation's own site. Webby and Communicator are stored in `public/images/awards/`; the Hermes logo still loads from hermesawards.com and needs a local copy before launch.
+- All three logos are stored in `public/images/awards/`. Webby and Communicator are from each organisation's own site; Hermes was supplied.
 - No award category, level or year is shown, because none has been supplied. Add them in `src/data/awards.ts`.
 
 ### Credits not yet verified
