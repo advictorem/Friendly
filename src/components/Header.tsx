@@ -63,7 +63,7 @@ export default function Header() {
       >
         <nav aria-label="Mobile" className={open ? 'is-in' : ''}>
           {links.map((l, i) => (
-            <NavLink key={l.to} to={l.to} end={l.to === '/'} tabIndex={open ? 0 : -1} className={({ isActive }) => `display mask-line text-[17vw] leading-[1] ${isActive ? 'text-white' : 'text-mute'}`} style={{ ['--i' as string]: i + 2 }}>
+            <NavLink key={l.to} to={l.to} end={l.to === '/'} tabIndex={open ? 0 : -1} className={({ isActive }) => `display flat mask-line text-[17vw] leading-[1] ${isActive ? 'text-white' : 'text-mute'}`} style={{ ['--i' as string]: i + 2 }}>
               <span>{l.label}</span>
             </NavLink>
           ))}
