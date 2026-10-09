@@ -5,7 +5,7 @@ import { Reveal, RevealLines } from './Reveal'
 export default function Awards() {
   return (
     <section className="gutter pb-40 sm:pb-56">
-      <RevealLines as="h2" className="display mb-14 text-center text-[clamp(40px,6vw,104px)] text-white sm:mb-20" lines={['Recognized by']} />
+      <RevealLines as="h2" className="display flat mb-14 text-center text-[clamp(40px,6vw,104px)] text-white sm:mb-20" lines={['Recognized by']} />
       <ul className="grid gap-x-2 gap-y-10 sm:grid-cols-3">
         {awards.map((a, i) => (
           <Reveal as="li" key={a.project} delay={i * 2}>
