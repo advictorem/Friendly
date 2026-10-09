@@ -1,17 +1,21 @@
 import { awards } from '../data/awards'
 import { Reveal, RevealLines } from './Reveal'
 
-/** "Proudly awarded with" — three award marks, each linking to the awarding body. */
+/** Award marks, each with the project it was won for and the year. */
 export default function Awards() {
   return (
-    <section className="gutter pb-40 text-center sm:pb-56">
-      <RevealLines as="h2" className="display text-[clamp(52px,9.5vw,180px)] text-white" lines={['Proudly', 'awarded', 'with']} />
-      <ul className="mt-14 grid gap-2 sm:mt-20 sm:grid-cols-3">
+    <section className="gutter pb-40 sm:pb-56">
+      <RevealLines as="h2" className="display mb-14 text-center text-[clamp(40px,6vw,104px)] text-white sm:mb-20" lines={['Recognized by']} />
+      <ul className="grid gap-x-2 gap-y-10 sm:grid-cols-3">
         {awards.map((a, i) => (
-          <Reveal as="li" key={a.name} delay={i * 2}>
-            <a href={a.href} target="_blank" rel="noreferrer" className="group flex aspect-[3/2] items-center justify-center rounded-[14px] bg-card">
-              <img src={a.logo} alt={a.name} loading="lazy" style={{ width: `${Math.round(Math.min(62, 26 * Math.sqrt(a.ratio)))}%` }} className="h-auto max-h-[56%] object-contain opacity-80 grayscale transition-[opacity,transform] duration-500 ease-cine group-hover:scale-105 group-hover:opacity-100" />
+          <Reveal as="li" key={a.project} delay={i * 2}>
+            <a href={a.href} target="_blank" rel="noreferrer" aria-label={`${a.name}, ${a.project}, ${a.year}`} className="flex aspect-[3/2] items-center justify-center rounded-[14px] bg-card">
+              <img src={a.logo} alt="" loading="lazy" style={{ width: `${Math.round(Math.min(62, 26 * Math.sqrt(a.ratio)))}%` }} className="h-auto max-h-[56%] object-contain" />
             </a>
+            <p className="mt-4 flex flex-wrap items-baseline justify-center gap-x-2 text-center">
+              <span className="label text-2xl text-white">{a.project}</span>
+              <span className="meta">{a.name} <span aria-hidden="true">/</span> {a.year}</span>
+            </p>
           </Reveal>
         ))}
       </ul>

@@ -23,17 +23,16 @@ Vimeo returns no poster or duration for these four, which usually means embeddin
 Previews use Vimeo's background player rather than stored clips, so there are no missing preview files. Background mode depends on the Vimeo account plan; where Vimeo declines it, the tile keeps its black-and-white to colour transition and shows no motion.
 
 ### Client logos
-Nineteen logos are shown on the About page: eighteen supplied as white PNGs on 2026-10-09 and Gibson's SVG from the original site.
+Twenty logos are shown on the About page: nineteen supplied as white PNGs on 2026-10-09 and Gibson's SVG from the original site. All are shown at full white with no hover effect; the Sony Music mark was converted from grey to white.
 
-- Six supplied logos are for clients with no project in the imported portfolio: Warner Bros. Records, Sony Music, Live Nation, California Lottery, XYZ Films, VTA.
+- Seven supplied logos are for clients with no project in the imported portfolio: Warner Bros. Records, Sony Music, Live Nation, California Lottery, XYZ Films, VTA, SCAG.
 - **Serj Tankian** is in the portfolio and has no logo, so he is not shown.
-- Nineteen logos leave one empty cell in the five-column grid; a twentieth would close it.
 
 ### Awards
-The About page shows three award marks: The Webby Awards, Hermes Creative Awards and The Communicator Awards.
+The About page "Recognized by" section shows three awards.
 
 - All three logos are stored in `public/images/awards/`. Webby and Communicator are from each organisation's own site; Hermes was supplied.
-- No award category, level or year is shown, because none has been supplied. Add them in `src/data/awards.ts`.
+- Awards shown, as supplied: Webby Awards for Motiv Ring (2018), Webby Awards for Glowforge (2021), Hermes Creative Award for Sauro (2018). The Communicator Awards logo is no longer shown; the file is kept in `public/images/awards/`.
 
 ### Credits not yet verified
 Director, cinematographer and year are unset for all three case studies. The brief's values (Ara Soudjian, Garen Mirzaian, 2025) were given as template examples, so they are not shown. Production and client are shown.

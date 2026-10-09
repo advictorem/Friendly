@@ -33,6 +33,7 @@ export const clients: Client[] = [
   { name: 'Motiv', logo: local('motiv'), ratio: 7.1 },
   { name: 'Sauro', logo: local('sauro'), ratio: 3.89 },
   { name: 'Madani', logo: local('madani'), ratio: 9.55 },
+  { name: 'SCAG', logo: local('scag'), ratio: 2.18 },
   // In the portfolio, no logo supplied:
   { name: 'Serj Tankian' },
 ]
