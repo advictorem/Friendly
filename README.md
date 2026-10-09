@@ -49,7 +49,8 @@ All repeated content is data, in `src/data/`:
 
 ## Assets
 
-- Supplied files (logo, team portraits, contact photo, Creative Visionaries still) are in `public/images/`, converted to WebP.
+- Supplied files (logo, team portraits, contact photo, Creative Visionaries slideshow) are in `public/images/`, converted to WebP.
+- Favicons (`favicon.ico`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192/512.png`) and the share image (`og-image.jpg`, 1200×630) are in `public/`. The share image and `og:url` in `index.html` use absolute staging URLs: change them to the production domain at launch.
 - Portfolio thumbnails load from the Vimeo CDN at 960px, falling back to the copy on friendlyfilmworks.com.
 - Client logos are in `public/images/logos/` (Gibson's still loads from friendlyfilmworks.com).
 - Case-study stills load from friendlyfilmworks.com.
