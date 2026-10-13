@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import FitText from '../components/FitText'
+import FocusWordmark from '../components/FocusWordmark'
 import Footer from '../components/Footer'
 import LensFrame, { FrameGuide, PacificClock } from '../components/LensFrame'
 import PortfolioGrid from '../components/PortfolioGrid'
@@ -16,15 +16,12 @@ export default function Home() {
       <section className={`relative bg-black pb-[clamp(28px,4vw,56px)] pt-[clamp(110px,12vw,170px)] ${ready ? 'is-in' : ''}`}>
         <LensFrame />
         <h1 className="sr-only">Friendly Entertainment</h1>
-        {/* Wordmark with a lens-focus falloff: a blurred copy underneath, and a sharp copy masked so it fades out towards the edges. */}
+        {/* Wordmark: out of focus until hovered, then a focus band follows the cursor (see FocusWordmark). */}
         <div aria-hidden="true" className="gutter relative">
           <FrameGuide />
           <div className="overflow-hidden">
             <div className="translate-y-full transition-transform duration-[1300ms] ease-cine [.is-in_&]:translate-y-0">
-              <div className="relative">
-                <FitText className="text-[#e6e6e6] blur-[6px] opacity-90">FRIENDLY</FitText>
-                <FitText className="absolute inset-0 text-[#e6e6e6] [mask-image:linear-gradient(90deg,transparent_0%,#000_26%,#000_74%,transparent_100%)] [-webkit-mask-image:linear-gradient(90deg,transparent_0%,#000_26%,#000_74%,transparent_100%)]">FRIENDLY</FitText>
-              </div>
+              <FocusWordmark text="FRIENDLY" />
             </div>
           </div>
         </div>
