@@ -1,4 +1,4 @@
-import { ReactNode, useLayoutEffect, useRef } from 'react'
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Awards from '../components/Awards'
@@ -29,6 +29,8 @@ const visionaries = [
 export default function About() {
   useSeo('About', 'Friendly Entertainment crafts premium, story-driven content that connects with your audience — friendly, collaborative, and world-class.')
   const statement = useRef<HTMLHeadingElement>(null)
+  const [ready, setReady] = useState(false)
+  useEffect(() => { const id = requestAnimationFrame(() => setReady(true)); return () => cancelAnimationFrame(id) }, [])
   const closing = useRef<HTMLElement>(null)
   const [v1, v2] = site.about.videos
 
@@ -55,8 +57,13 @@ export default function About() {
   return (
     <>
       <section className="gutter pt-36 sm:pt-44">
-        <h1 ref={statement} className="display flat text-[clamp(38px,7.1vw,138px)] leading-[1.02] text-white">
-          {lines.map((line, i) => <span key={i} data-line className="md:block">{line}{" "}</span>)}
+        {/* Rises out of a mask on load, like the homepage wordmark: line by line on desktop, as one block on phones where the lines reflow. */}
+        <h1 ref={statement} className={`statement-rise display flat text-[clamp(38px,7.1vw,138px)] leading-[1.02] text-white ${ready ? 'is-in' : ''}`}>
+          {lines.map((line, i) => (
+            <span key={i} data-line className="md:block md:overflow-hidden md:pb-[0.06em] md:-mb-[0.06em]" style={{ ['--i' as string]: i }}>
+              <span className="md:block">{line}{' '}</span>
+            </span>
+          ))}
         </h1>
         <Reveal className="ml-auto mt-24 max-w-[440px] pb-32 text-lg leading-relaxed text-soft sm:mt-40 sm:pb-48 sm:text-xl">
           <p>At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name – friendly, collaborative, and full of good energy — but what we deliver is world-class.</p>
