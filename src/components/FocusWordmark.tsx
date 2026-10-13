@@ -7,8 +7,7 @@ const SHARP_MASK =
   'linear-gradient(90deg, transparent calc(var(--fx) - var(--fw)), #000 calc(var(--fx) - var(--fw) * 0.55), #000 calc(var(--fx) + var(--fw) * 0.55), transparent calc(var(--fx) + var(--fw)))'
 
 /**
- * The homepage wordmark, out of focus until you hover it. A vertical focus band, framed by small
- * autofocus brackets, follows a smoothed copy of the cursor and pulls the letters under it sharp.
+ * The homepage wordmark, out of focus until you hover it. A vertical focus band follows a smoothed copy of the cursor and pulls the letters under it sharp.
  * A soft circular cursor dot trails the pointer with the same easing.
  * Touch screens and reduced-motion visitors get a still version that is sharp in the middle.
  */
@@ -77,21 +76,13 @@ export default function FocusWordmark({ text }: { text: string }) {
       <FitText className="focus-soft text-[#e6e6e6]">{text}</FitText>
       {/* In focus: revealed only inside the band (hover) or in the middle (static) */}
       <FitText className="focus-sharp absolute inset-0 text-[#e6e6e6]">{text}</FitText>
-      {/* Autofocus brackets riding on the band */}
-      <div className="focus-af pointer-events-none absolute inset-y-[0.04em] left-0 w-[calc(var(--fw)*1.1)]" aria-hidden="true">
-        {['left-0 top-0 border-l border-t', 'right-0 top-0 border-r border-t', 'left-0 bottom-0 border-b border-l', 'bottom-0 right-0 border-b border-r'].map((c) => (
-          <span key={c} className={`absolute h-[clamp(12px,1.4vw,22px)] w-[clamp(12px,1.4vw,22px)] border-white/80 ${c}`} />
-        ))}
-      </div>
       {/* Rendered into <body>: the wordmark sits inside a transformed reveal wrapper, which would otherwise offset a fixed element. */}
-      {createPortal(<div ref={dot} className="pointer-events-none fixed left-0 top-0 z-[90] h-5 w-5 rounded-full bg-white/50 opacity-0 mix-blend-difference" aria-hidden="true" />, document.body)}
+      {createPortal(<div ref={dot} className="pointer-events-none fixed left-0 top-0 z-[90] h-5 w-5 rounded-full bg-white/50 opacity-0 shadow-[0_0_0_1px_rgba(0,0,0,0.18)]" aria-hidden="true" />, document.body)}
       <style>{`
         .focus-wordmark { --fw: clamp(110px, 13vw, 260px); }
         .focus-wordmark[data-mode="hover"] { cursor: none; }
         .focus-wordmark .focus-soft { filter: blur(clamp(5px, 0.6vw, 10px)); opacity: 0.85; }
         .focus-wordmark[data-mode="hover"] .focus-sharp { -webkit-mask-image: ${SHARP_MASK}; mask-image: ${SHARP_MASK}; opacity: var(--focus); }
-        .focus-wordmark[data-mode="hover"] .focus-af { transform: translateX(calc(var(--fx) - var(--fw) * 0.55)); opacity: calc(var(--focus) * 0.9); }
-        .focus-wordmark:not([data-mode="hover"]) .focus-af { display: none; }
         .focus-wordmark:not([data-mode="hover"]) .focus-sharp {
           -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
           mask-image: linear-gradient(90deg, transparent 0%, #000 26%, #000 74%, transparent 100%);
