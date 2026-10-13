@@ -19,15 +19,31 @@ function PacificClock() {
   )
 }
 
+/** Frame guide drawn around the wordmark: corner brackets plus a tick at mid-height on each side. */
+export function FrameGuide() {
+  const line = 'absolute bg-white/75'
+  const arm = 'clamp(72px, 10vw, 200px)'   // horizontal bracket arm
+  const drop = 'clamp(30px, 4.2vw, 78px)'  // vertical bracket arm
+  const tick = 'clamp(36px, 4.6vw, 90px)'
+  const y = 'clamp(-34px, -2.6vw, -14px)'  // how far above and below the letters the frame sits
+  const x = 'clamp(-14px, -0.9vw, -6px)'  // measured from the wordmark's edge, inside the page gutter
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute z-10" style={{ top: y, bottom: y, left: `calc(var(--gutter) + ${x})`, right: `calc(var(--gutter) + ${x})` }}>
+      <span className={line} style={{ top: 0, left: 0, width: arm, height: 1 }} /><span className={line} style={{ top: 0, left: 0, width: 1, height: drop }} />
+      <span className={line} style={{ top: 0, right: 0, width: arm, height: 1 }} /><span className={line} style={{ top: 0, right: 0, width: 1, height: drop }} />
+      <span className={line} style={{ bottom: 0, left: 0, width: arm, height: 1 }} /><span className={line} style={{ bottom: 0, left: 0, width: 1, height: drop }} />
+      <span className={line} style={{ bottom: 0, right: 0, width: arm, height: 1 }} /><span className={line} style={{ bottom: 0, right: 0, width: 1, height: drop }} />
+      <span className={line} style={{ top: '50%', left: 0, width: tick, height: 1 }} />
+      <span className={line} style={{ top: '50%', right: 0, width: tick, height: 1 }} />
+    </div>
+  )
+}
+
 /**
- * Viewfinder overlay for the hero: corner brackets and side ticks like a camera's frame guide,
- * a faint burnt-orange light leak on each edge, film grain, and the Los Angeles clock.
+ * Hero atmosphere: a faint burnt-orange light leak on each edge, film grain, and the Los Angeles clock.
  * It is positioned inside the hero, so it leaves the screen with the hero as the page scrolls.
  */
 export default function LensFrame() {
-  const line = 'absolute bg-white/70'
-  const c = 'clamp(56px, 9vw, 150px)' // bracket arm length
-  const m = 'clamp(14px, 1.6vw, 24px)' // inset from the viewport edge
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
       {/* Light leaks */}
@@ -39,20 +55,9 @@ export default function LensFrame() {
         <filter id="lens-grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" /><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" /></filter>
         <rect width="100%" height="100%" filter="url(#lens-grain)" />
       </svg>
-
-      {/* Corner brackets */}
-      <span className={line} style={{ top: m, left: m, width: c, height: 1 }} /><span className={line} style={{ top: m, left: m, width: 1, height: c }} />
-      <span className={line} style={{ top: m, right: m, width: c, height: 1 }} /><span className={line} style={{ top: m, right: m, width: 1, height: c }} />
-      <span className={line} style={{ bottom: m, left: m, width: c, height: 1 }} /><span className={line} style={{ bottom: m, left: m, width: 1, height: c }} />
-      <span className={line} style={{ bottom: m, right: m, width: c, height: 1 }} /><span className={line} style={{ bottom: m, right: m, width: 1, height: c }} />
-      {/* Side ticks */}
-      <span className={line} style={{ top: '50%', left: m, width: `calc(${c} / 2)`, height: 1 }} />
-      <span className={line} style={{ top: '50%', right: m, width: `calc(${c} / 2)`, height: 1 }} />
-
-      {/* Clock */}
-      <div className="pointer-events-auto absolute bottom-[clamp(26px,3.4vw,46px)] right-[clamp(26px,3.6vw,52px)] text-[12px] tracking-[0.08em] text-white sm:text-[13px]">
-        <PacificClock />
-      </div>
     </div>
   )
 }
+
+/** The clock, placed by the hero at the right edge under the frame. */
+export { PacificClock }
