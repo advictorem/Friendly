@@ -6,7 +6,7 @@ import { useSeo } from '../hooks/useSeo'
 
 export default function Contact() {
   useSeo('Get in touch', 'Call 323 739 0372 or email hello@friendlyfilmworks.com to start a project with Friendly Entertainment.')
-  const big = 'display line-link text-[clamp(24px,2.6vw,44px)] text-white'
+  const big = 'display flat line-link text-[clamp(24px,2.6vw,44px)] text-white'
   return (
     <section className="relative flex min-h-[100svh] flex-col">
       {/* Anchored right so the Hollywood sign stays in frame on narrow screens. */}
@@ -20,7 +20,7 @@ export default function Contact() {
         </div>
 
         <div>
-          <Reveal className="grid gap-10 pb-14 pt-16 sm:grid-cols-3 sm:gap-6">
+          <Reveal className="grid gap-10 pb-14 pt-16 sm:grid-cols-[auto_auto_auto] sm:justify-between sm:gap-x-10">
             <div>
               <h2 className="meta !text-soft">Call us</h2>
               <a href={site.phoneHref} className={`${big} mt-2`}>{site.phoneDisplay}</a>

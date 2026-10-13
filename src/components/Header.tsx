@@ -4,7 +4,6 @@ import { asset } from '../data/assets'
 import { site } from '../data/site'
 
 const links = [
-  { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/work', label: 'Our Work' },
   { to: '/contact', label: 'Contact' },
@@ -40,6 +39,7 @@ export default function Header() {
         <nav aria-label="Primary" className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 gap-8 md:flex">
           {links.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.to === '/'} className={({ isActive }) => `line-link text-[13px] uppercase tracking-[0.08em] transition-colors duration-300 ${isActive ? 'text-white' : 'text-soft hover:text-white'}`}>
+              {l.to === '/contact' && <span aria-hidden="true" className="rec-light mr-2.5 inline-block h-[7px] w-[7px] rounded-full bg-[#e0162b] align-middle" />}
               <span className="roll"><span>{l.label}</span><span aria-hidden="true">{l.label}</span></span>
             </NavLink>
           ))}

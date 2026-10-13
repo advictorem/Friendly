@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import CategoryFilter from '../components/CategoryFilter'
+import FeaturedList from '../components/FeaturedList'
 import Footer from '../components/Footer'
 import PortfolioGrid from '../components/PortfolioGrid'
 import { Reveal, RevealLines } from '../components/Reveal'
-import { caseStudies } from '../data/caseStudies'
 import { CATEGORIES, projects } from '../data/projects'
 import { useSeo } from '../hooks/useSeo'
 
@@ -20,21 +19,12 @@ export default function Work() {
 
         <Reveal className="mt-16 sm:mt-24">
           <h2 className="meta">Featured projects</h2>
-          <ul className="mt-5 space-y-4 sm:space-y-1">
-            {caseStudies.map((c) => (
-              <li key={c.slug}>
-                <Link to={`/work/${c.slug}`} className="group inline-flex flex-col items-center gap-1 text-mute sm:flex-row sm:items-baseline sm:gap-3 transition-colors duration-300 hover:text-white">
-                  <span className="display text-[clamp(34px,5vw,76px)] text-soft transition-colors duration-300 group-hover:text-white">{c.title}</span>
-                  <span className="meta">{c.client}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <FeaturedList />
         </Reveal>
       </section>
 
       <section aria-label="All projects" className="px-2">
-        <div className="gutter sticky top-0 z-30 -mx-2 bg-gradient-to-b from-black via-black/95 to-transparent pb-8 pt-[84px]">
+        <div className="gutter sticky top-0 z-30 -mx-2 bg-gradient-to-b from-black via-black/95 to-transparent pb-8 pt-[92px] md:pt-[100px]">
           <CategoryFilter value={filter} onChange={setFilter} counts={counts} />
         </div>
         <p className="sr-only" aria-live="polite">{counts[filter]} projects shown</p>

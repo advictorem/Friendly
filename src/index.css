@@ -45,6 +45,9 @@ body.is-locked { overflow: hidden; }
   .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
   .is-in.fade-up, .is-in .fade-up { opacity: 1; transform: none; }
 
+  /* Recording light: slow blink beside the Contact link. */
+  .rec-light { box-shadow: 0 0 8px 1px rgba(224, 22, 43, 0.55); animation: rec-blink 1.6s ease-in-out infinite; }
+  @keyframes rec-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
   .pill { display: inline-flex; align-items: center; gap: 14px; height: 52px; padding: 0 26px; border: 1px solid #4a4a4a; border-radius: 999px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 0.4s var(--ease), background-color 0.4s var(--ease), color 0.4s var(--ease); }
   .pill .pill-icon { display: inline-block; transition: transform 0.5s var(--ease); }
   .pill:hover, .pill:focus-visible { border-color: #fff; background: #fff; color: #000; }
