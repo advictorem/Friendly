@@ -5,6 +5,7 @@ import App from './App'
 import '@fontsource/fjalla-one/latin-400.css'
 import '@fontsource/inter/latin-400.css'
 import '@fontsource/inter/latin-500.css'
+import '@fontsource/jetbrains-mono/latin-400.css'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(

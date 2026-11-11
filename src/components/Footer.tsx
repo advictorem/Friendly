@@ -2,6 +2,7 @@ import { CSSProperties } from 'react'
 import { site } from '../data/site'
 import { useInView } from '../hooks/useInView'
 import FitText from './FitText'
+import InstagramReel from './InstagramReel'
 import { RevealLines } from './Reveal'
 
 export function Credits({ className = '' }: { className?: string }) {
@@ -32,6 +33,8 @@ export default function Footer() {
           ))}
         </ul>
       </div>
+
+      <InstagramReel />
 
       <div ref={ref} aria-hidden="true" className={`mt-20 overflow-hidden sm:mt-28 ${inView ? 'is-in' : ''}`}>
         <div className="translate-y-[35%] opacity-0 transition-[transform,opacity] duration-[1400ms] ease-cine [.is-in>&]:translate-y-0 [.is-in>&]:opacity-100" style={{ '--i': 0 } as CSSProperties}>

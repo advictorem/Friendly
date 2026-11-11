@@ -1,40 +1,52 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-const clock = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
-const zone = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', timeZoneName: 'short' })
+const laTime = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+const laZone = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', timeZoneName: 'short' })
+const FPS = 24
 
-/** Live 24-hour clock in Los Angeles time, with the zone (PST or PDT) it is currently on. */
-function PacificClock() {
-  const [now, setNow] = useState(() => new Date())
+/** Running timecode: current Los Angeles time plus a 24 fps frame count (HH:MM:SS:FF). */
+function Timecode() {
+  const tc = useRef<HTMLSpanElement>(null)
+  const [tz, setTz] = useState('PT')
   useEffect(() => {
-    const t = window.setInterval(() => setNow(new Date()), 1000)
-    return () => window.clearInterval(t)
+    setTz(laZone.formatToParts(new Date()).find((p) => p.type === 'timeZoneName')?.value ?? 'PT')
+    let raf = 0, last = ''
+    const tick = () => {
+      const now = new Date()
+      const frame = String(Math.floor((now.getMilliseconds() / 1000) * FPS)).padStart(2, '0')
+      const text = `${laTime.format(now).replace(/^24/, '00')}:${frame}`
+      if (text !== last && tc.current) { tc.current.textContent = text; last = text }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
   }, [])
-  const time = clock.format(now).replace(/^24/, '00')
-  const tz = zone.formatToParts(now).find((p) => p.type === 'timeZoneName')?.value ?? 'PT'
   return (
-    <time dateTime={now.toISOString()} className="tabular-nums" aria-label={`Current time in Los Angeles, ${time} ${tz}`}>
-      {time} <span className="text-mute">{tz}</span>
-    </time>
+    <span className="tabular-nums">
+      <span ref={tc}>00:00:00:00</span> <span className="text-white/45">{tz}</span>
+    </span>
   )
 }
 
-/** Frame guide drawn around the wordmark: corner brackets plus a tick at mid-height on each side. */
-export function FrameGuide() {
-  const line = 'absolute bg-white/75'
-  const arm = 'clamp(72px, 10vw, 200px)'   // horizontal bracket arm
-  const drop = 'clamp(30px, 4.2vw, 78px)'  // vertical bracket arm
-  const tick = 'clamp(36px, 4.6vw, 90px)'
-  const y = 'clamp(-34px, -2.6vw, -14px)'  // how far above and below the letters the frame sits
-  const x = 'clamp(-14px, -0.9vw, -6px)'  // measured from the wordmark's edge, inside the page gutter
+/**
+ * Camera viewfinder readout across the top of the hero: corner marks, a blinking REC light with a live
+ * Los Angeles timecode on the left, and camera settings on the right. Top corners only, by design.
+ */
+export function CameraHud() {
+  const arm = 'clamp(22px, 2.2vw, 34px)'
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute z-10" style={{ top: y, bottom: y, left: `calc(var(--gutter) + ${x})`, right: `calc(var(--gutter) + ${x})` }}>
-      <span className={line} style={{ top: 0, left: 0, width: arm, height: 1 }} /><span className={line} style={{ top: 0, left: 0, width: 1, height: drop }} />
-      <span className={line} style={{ top: 0, right: 0, width: arm, height: 1 }} /><span className={line} style={{ top: 0, right: 0, width: 1, height: drop }} />
-      <span className={line} style={{ bottom: 0, left: 0, width: arm, height: 1 }} /><span className={line} style={{ bottom: 0, left: 0, width: 1, height: drop }} />
-      <span className={line} style={{ bottom: 0, right: 0, width: arm, height: 1 }} /><span className={line} style={{ bottom: 0, right: 0, width: 1, height: drop }} />
-      <span className={line} style={{ top: '50%', left: 0, width: tick, height: 1 }} />
-      <span className={line} style={{ top: '50%', right: 0, width: tick, height: 1 }} />
+    <div className="hud pointer-events-none absolute inset-x-0 z-20 font-mono text-[11px] uppercase tracking-[0.14em] text-[#ece6dc] sm:text-[12px]" style={{ top: 'var(--hud-top)' }}>
+      <span aria-hidden="true" className="absolute bg-white/70" style={{ left: 'var(--hud-inset)', top: 0, width: arm, height: 1 }} />
+      <span aria-hidden="true" className="absolute bg-white/70" style={{ left: 'var(--hud-inset)', top: 0, width: 1, height: arm }} />
+      <span aria-hidden="true" className="absolute bg-white/70" style={{ right: 'var(--hud-inset)', top: 0, width: arm, height: 1 }} />
+      <span aria-hidden="true" className="absolute bg-white/70" style={{ right: 'var(--hud-inset)', top: 0, width: 1, height: arm }} />
+      <div className="flex items-center justify-between pt-[clamp(18px,1.9vw,28px)]" style={{ paddingLeft: 'calc(var(--hud-inset) + clamp(16px, 1.8vw, 28px))', paddingRight: 'calc(var(--hud-inset) + clamp(16px, 1.8vw, 28px))' }}>
+        <p className="flex items-center gap-2.5">
+          <span aria-hidden="true" className="rec-light inline-block h-[9px] w-[9px] rounded-full bg-[#e0162b]" />
+          <span>Rec</span> <Timecode />
+        </p>
+        <p className="hidden text-white/70 md:block">A-Cam · 24 fps · 2.39:1 · ISO 800 · 5600K</p>
+      </div>
     </div>
   )
 }
@@ -45,7 +57,7 @@ export function FrameGuide() {
  */
 export default function LensFrame() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       {/* Light leaks */}
       <div className="absolute inset-y-0 left-0 w-[14vw] max-w-[220px]" style={{ background: 'linear-gradient(90deg, rgba(87,36,22,0) 0%, rgba(87,36,22,0.85) 45%, rgba(87,36,22,0) 100%)', filter: 'blur(14px)' }} />
       <div className="absolute inset-y-0 right-0 w-[14vw] max-w-[220px]" style={{ background: 'linear-gradient(90deg, rgba(87,36,22,0) 0%, rgba(87,36,22,0.85) 55%, rgba(87,36,22,0) 100%)', filter: 'blur(14px)' }} />
@@ -59,5 +71,3 @@ export default function LensFrame() {
   )
 }
 
-/** The clock, placed by the hero at the right edge under the frame. */
-export { PacificClock }
