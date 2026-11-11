@@ -64,3 +64,10 @@ All repeated content is data, in `src/data/`:
 - Each staging or production domain must be allowed in Vimeo for any video whose embed privacy is set to specific domains (see `CONTENT-AUDIT.md`).
 
 See `CONTENT-AUDIT.md` for what was imported and what is still open.
+
+## Instagram strip (footer)
+
+`src/components/InstagramReel.tsx` shows Instagram posts as a drifting 35mm film strip under "Let's make something great."
+
+- **Default:** a snapshot of the 10 latest posts (pinned posts skipped), stored in `public/images/instagram/` and listed in `src/data/instagram.ts`. To refresh it by hand, replace the images and the list.
+- **Live feed (optional):** create a free feed at [behold.so](https://behold.so) connected to @friendlyfilmworks, copy its JSON feed URL into `INSTAGRAM_FEED_URL` in `src/data/instagram.ts`, and rebuild. The free plan returns up to 6 posts and refreshes daily; paid plans refresh hourly. If the feed fails, the snapshot is shown.
