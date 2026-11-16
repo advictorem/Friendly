@@ -46,7 +46,7 @@ function PortfolioCard({ project, eager = false }: { project: Project; eager?: b
       <button
         ref={media}
         type="button"
-        onClick={() => openModal({ vimeoId: project.vimeoId, title: `${project.client} — ${project.title}` })}
+        onClick={() => openModal({ vimeoId: project.vimeoId, title: `${project.client}: ${project.title}` })}
         onFocus={() => canHover() && setHovered(true)}
         onBlur={() => setHovered(false)}
         aria-label={`Play ${project.title}, ${project.client}`}

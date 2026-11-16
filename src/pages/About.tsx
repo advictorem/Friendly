@@ -20,6 +20,12 @@ gsap.registerPlugin(ScrollTrigger)
 /** “BTS LOOP” on Friendly Filmworks’ Vimeo, the background film on friendlyentertainment.la/about. */
 const SIZZLE_ID = '1239698131'
 
+const INTRO = [
+  'At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name: friendly, collaborative, and full of good energy. What we deliver is world‑class.',
+  'That standard starts with our founder, Ara Soudjian. A Los Angeles-born director and producer, Ara makes music videos, commercials, and brand films for clients including Gibson, Nike, LAFC, and LA Metro. He co-directed and co-edited System of a Down’s “Protect the Land” and was an executive producer and director on the revival of Beyond Belief: Fact or Fiction, hosted by Jonathan Frakes.',
+  'His work has earned a 2017 Webby People’s Voice Award for the Motiv campaign, a 2022 Webby Award for Glowforge’s “Create Your World,” two Music Video Production Association awards for his videos with Wiz Khalifa and Serj Tankian, and a Telly Gold for the Epiphone film for Noel Gallagher’s Riviera.',
+]
+
 const visionaries = [
   { src: asset('images/visionaries/bts-01.webp'), alt: 'Ara Soudjian smiling with an actor on a blue-lit set' },
   { src: asset('images/visionaries/bts-02.webp'), alt: 'Ara Soudjian operating an ARRI Alexa camera with crew behind him' },
@@ -31,7 +37,7 @@ const visionaries = [
 ]
 
 export default function About() {
-  useSeo('About', 'Friendly Entertainment crafts premium, story-driven content that connects with your audience — friendly, collaborative, and world-class.')
+  useSeo('About', 'Friendly Entertainment crafts premium, story-driven content that connects with your audience. Friendly, collaborative, and world-class.')
   const statement = useRef<HTMLHeadingElement>(null)
   const [ready, setReady] = useState(false)
   useEffect(() => { const id = requestAnimationFrame(() => setReady(true)); return () => cancelAnimationFrame(id) }, [])
@@ -69,17 +75,18 @@ export default function About() {
             </span>
           ))}
         </h1>
-        <div className="mt-24 grid items-start gap-10 pb-32 sm:mt-32 sm:pb-48 md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:gap-[clamp(32px,4vw,72px)]">
+        <div className="mt-24 grid items-start gap-10 pb-32 sm:mt-32 sm:pb-48 md:grid-cols-[minmax(0,1fr)_minmax(0,460px)] md:gap-[clamp(32px,4vw,72px)]">
           <Reveal>
             {/* BTS sizzle: muted, chromeless and looping, with its first frame shown while the player loads. */}
             <div className="relative aspect-video overflow-hidden bg-card bg-cover bg-center" style={{ backgroundImage: `url(${asset('images/about/sizzle-poster.webp')})` }}>
               <VideoPreview vimeoId={SIZZLE_ID} cover="h-full w-full" loopSeconds={0} />
             </div>
           </Reveal>
-          <Reveal className="text-lg leading-relaxed text-soft sm:text-xl md:pt-[6%]">
-            <p>At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name – friendly, collaborative, and full of good energy — but what we deliver is world-class.</p>
+          <Reveal className="space-y-5 text-lg leading-relaxed text-soft md:pt-[2%]">
+            {INTRO.map((para) => <p key={para.slice(0, 24)}>{para}</p>)}
           </Reveal>
         </div>
+
       </section>
 
       <section aria-label="Team" className="px-2">

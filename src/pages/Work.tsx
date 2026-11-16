@@ -8,7 +8,7 @@ import { CATEGORIES, projects } from '../data/projects'
 import { useSeo } from '../hooks/useSeo'
 
 export default function Work() {
-  useSeo('Our Work', 'Commercials, fashion, film and TV, music videos, sports and tech — the full Friendly Entertainment portfolio.')
+  useSeo('Our Work', 'Commercials, fashion, film and TV, music videos, sports and tech: the full Friendly Entertainment portfolio.')
   const [filter, setFilter] = useState('all')
   const counts = useMemo(() => Object.fromEntries(CATEGORIES.map((c) => [c.id, c.id === 'all' ? projects.length : projects.filter((p) => p.category.includes(c.id as never)).length])), [])
 

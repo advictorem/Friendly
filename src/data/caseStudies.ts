@@ -125,7 +125,7 @@ export const caseStudies: CaseStudy[] = [
     client: 'Gibson',
     category: 'Music Videos',
     featuring: 'Gene Simmons, Kirk Hammett, Noel Gallagher, Mike Dirnt, Sergio Vallín, Serj Tankian',
-    summary: 'A global content campaign bringing Gibson’s rock icons to life — from stage to screen.',
+    summary: 'A global content campaign bringing Gibson’s rock icons to life, from stage to screen.',
     hero: vimeoThumb('1994581812-0834a2b091a8d9743324d23c9eff4f161b606493af024c2c094f7c7a77810caa', 1280),
     vimeoId: '1066793787',
     films: ['701453381', '740470654', '1139181925', '698939201', '938058327', '1018850935'],
@@ -148,7 +148,7 @@ export const caseStudies: CaseStudy[] = [
       'Every piece was shaped for a social-first release, so the work moved as easily through a feed as it did on a larger screen.',
     ],
     result: [
-      'A body of work that carries Gibson’s icons from stage to screen — commercials, short films, and music videos that share one visual language and connect the brand to the people who play it.',
+      'A body of work that carries Gibson’s icons from stage to screen: commercials, short films, and music videos that share one visual language and connect the brand to the people who play it.',
     ],
     originalUrl: 'https://friendlyfilmworks.com/clients/gibson/',
   },
@@ -158,7 +158,7 @@ export const caseStudies: CaseStudy[] = [
     client: 'LAFC × Metro LA',
     category: 'Sports',
     featuring: 'Soccerhead, Ollie, Jason the Falconer',
-    summary: 'A campaign that celebrates Los Angeles — its energy, its community, and the fans who keep it moving.',
+    summary: 'A campaign that celebrates Los Angeles: its energy, its community, and the fans who keep it moving.',
     hero: lafc('KEVANI_TheTrio_LAMetro_20250717_04'),
     vimeoId: '1100755384',
     films: ['355368364', '777504476', '265108700'],
@@ -168,11 +168,11 @@ export const caseStudies: CaseStudy[] = [
     ].map(lafc),
     credits: { production: 'Friendly Ent.', client: 'LAFC × Metro LA' },
     overview: [
-      'When LAFC and LA Metro joined forces to make game days smoother and greener, Friendly brought their story to life — turning a city partnership into a cultural moment.',
+      'When LAFC and LA Metro joined forces to make game days smoother and greener, Friendly brought their story to life, turning a city partnership into a cultural moment.',
     ],
     challenge: [
-      'The story belonged to the fans, so the films follow real supporters on the move — from the train ride to the roar of BMO Stadium.',
-      'Friendly created a cinematic series of short films and social spots featuring LAFC’s most beloved figures — Soccerhead, Ollie, and Jason the Falconer — embodying the passion and pride that define the city.',
+      'The story belonged to the fans, so the films follow real supporters on the move, from the train ride to the roar of BMO Stadium.',
+      'Friendly created a cinematic series of short films and social spots featuring LAFC’s most beloved figures (Soccerhead, Ollie, and Jason the Falconer), embodying the passion and pride that define the city.',
     ],
     result: [
       'The campaign ran across film, social, and outdoor media, carrying the same picture of the city to screens, stations, and streets.',

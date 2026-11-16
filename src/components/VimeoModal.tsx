@@ -50,7 +50,7 @@ export default function VimeoModal() {
       ref={dialog}
       role="dialog"
       aria-modal="true"
-      aria-label={`${shown.title} — video`}
+      aria-label={`${shown.title}: video`}
       data-lenis-prevent
       className={`fixed inset-0 z-[100] flex items-center justify-center p-3 transition-opacity duration-300 ease-cine sm:p-8 ${visible ? 'opacity-100' : 'opacity-0'}`}
     >

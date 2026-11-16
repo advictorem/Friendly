@@ -78,7 +78,7 @@ const PAD = 'px-[clamp(22px,6vw,128px)]'
 export default function ProjectDetail() {
   const { slug } = useParams()
   const study = caseStudyBySlug(slug)
-  useSeo(study ? `${study.title} — ${study.client}` : 'Project', study?.summary ?? '')
+  useSeo(study ? `${study.title} | ${study.client}` : 'Project', study?.summary ?? '')
   if (!study) return <NotFound />
 
   const credits = ([
@@ -153,7 +153,7 @@ export default function ProjectDetail() {
         <Reveal as="section" className="px-2">
           {study.loop
             ? <LoopFilm vimeoId={study.vimeoId} poster={study.filmPoster ?? study.hero} title={`${study.client}, ${study.title} film`} />
-            : <Film vimeoId={study.vimeoId} title={main ? `${main.client} — ${main.title}` : study.title} poster={study.hero} />}
+            : <Film vimeoId={study.vimeoId} title={main ? `${main.client}: ${main.title}` : study.title} poster={study.hero} />}
         </Reveal>
       )}
 

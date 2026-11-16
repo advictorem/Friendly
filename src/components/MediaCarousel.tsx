@@ -54,7 +54,7 @@ export default function MediaCarousel({ images, label }: { images: string[]; lab
         ref={wrap}
         role="group"
         aria-roledescription="carousel"
-        aria-label={`${label} — stills. Drag, swipe or use the arrow keys to move.`}
+        aria-label={`${label}: stills. Drag, swipe or use the arrow keys to move.`}
         tabIndex={0}
         className="-rotate-2 cursor-grab touch-pan-y select-none"
       >

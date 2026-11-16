@@ -32,7 +32,7 @@ export default function Header() {
   return (
     <>
       <header className="gutter pointer-events-none fixed inset-x-0 top-0 z-50 flex h-[84px] items-center md:h-[116px] justify-between bg-gradient-to-b from-black/70 to-transparent">
-        <Link to="/" aria-label="Friendly Entertainment — home" className="pointer-events-auto block transition-opacity duration-300 hover:opacity-70">
+        <Link to="/" aria-label="Friendly Entertainment home" className="pointer-events-auto block transition-opacity duration-300 hover:opacity-70">
           <img src={asset('images/ff-logo.svg')} alt="Friendly Entertainment" width={102} height={88} className="h-[60px] w-auto md:h-[88px]" />
         </Link>
 

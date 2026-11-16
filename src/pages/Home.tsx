@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import LensFrame, { CameraHud } from '../components/LensFrame'
 import FitText from '../components/FitText'
 import PortfolioGrid from '../components/PortfolioGrid'
 import { projects } from '../data/projects'
 import { useSeo } from '../hooks/useSeo'
+
+/** The homepage shows the first dozen projects; the full portfolio lives on /work. */
+const HOME_TILES = 12
 
 export default function Home() {
   useSeo('Friendly Entertainment', 'Friendly Entertainment is a video production company based in Los Angeles, making story-driven content for products and brands.')
@@ -31,7 +35,10 @@ export default function Home() {
       </section>
 
       <section id="work" aria-label="Portfolio" className="px-2">
-        <PortfolioGrid projects={projects} />
+        <PortfolioGrid projects={projects.slice(0, HOME_TILES)} />
+        <div className="flex justify-center pb-8 pt-16 sm:pt-24">
+          <Link to="/work" className="pill">See More Work <span className="pill-icon" aria-hidden="true">→</span></Link>
+        </div>
       </section>
       <Footer />
     </>
