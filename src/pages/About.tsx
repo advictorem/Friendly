@@ -21,9 +21,9 @@ gsap.registerPlugin(ScrollTrigger)
 const SIZZLE_ID = '1239698131'
 
 const INTRO = [
-  'At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name: friendly, collaborative, and full of good energy. What we deliver is world‑class.',
-  'That standard starts with our founder, Ara Soudjian. A Los Angeles-born director and producer, Ara makes music videos, commercials, and brand films for clients including Gibson, Nike, LAFC, and LA Metro. He co-directed and co-edited System of a Down’s “Protect the Land” and was an executive producer and director on the revival of Beyond Belief: Fact or Fiction, hosted by Jonathan Frakes.',
-  'His work has earned a 2017 Webby People’s Voice Award for the Motiv campaign, a 2022 Webby Award for Glowforge’s “Create Your World,” two Music Video Production Association awards for his videos with Wiz Khalifa and Serj Tankian, and a Telly Gold for the Epiphone film for Noel Gallagher’s Riviera.',
+  'Friendly Entertainment was founded by Ara Soudjian on a simple belief: great people make great things happen.',
+  'After decades in Hollywood, Ara realized his greatest asset wasn’t just his experience, but the talented people, trusted relationships, and creative resources he’d built along the way. He created Friendly to bring them all together, knowing that what’s possible as a team is greater than what any one person can achieve alone.',
+  'Today, Friendly brings world‑class talent and a collaborative spirit to every project, proving that exceptional work starts with great relationships.',
 ]
 
 const visionaries = [
