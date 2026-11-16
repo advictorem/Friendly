@@ -8,6 +8,7 @@ import InlineVideo from '../components/InlineVideo'
 import { Reveal, RevealLines } from '../components/Reveal'
 import Slideshow from '../components/Slideshow'
 import TeamMember from '../components/TeamMember'
+import VideoPreview from '../components/VideoPreview'
 import { asset } from '../data/assets'
 import { site } from '../data/site'
 import { team } from '../data/team'
@@ -15,6 +16,9 @@ import { prefersReducedMotion } from '../hooks/motion'
 import { useSeo } from '../hooks/useSeo'
 
 gsap.registerPlugin(ScrollTrigger)
+
+/** “BTS LOOP” on Friendly Filmworks’ Vimeo, the background film on friendlyentertainment.la/about. */
+const SIZZLE_ID = '1239698131'
 
 const visionaries = [
   { src: asset('images/visionaries/bts-01.webp'), alt: 'Ara Soudjian smiling with an actor on a blue-lit set' },
@@ -65,9 +69,17 @@ export default function About() {
             </span>
           ))}
         </h1>
-        <Reveal className="ml-auto mt-24 max-w-[440px] pb-32 text-lg leading-relaxed text-soft sm:mt-40 sm:pb-48 sm:text-xl">
-          <p>At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name – friendly, collaborative, and full of good energy — but what we deliver is world-class.</p>
-        </Reveal>
+        <div className="mt-24 grid items-start gap-10 pb-32 sm:mt-32 sm:pb-48 md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:gap-[clamp(32px,4vw,72px)]">
+          <Reveal>
+            {/* BTS sizzle: muted, chromeless and looping, with its first frame shown while the player loads. */}
+            <div className="relative aspect-video overflow-hidden bg-card bg-cover bg-center" style={{ backgroundImage: `url(${asset('images/about/sizzle-poster.webp')})` }}>
+              <VideoPreview vimeoId={SIZZLE_ID} cover="h-full w-full" loopSeconds={0} />
+            </div>
+          </Reveal>
+          <Reveal className="text-lg leading-relaxed text-soft sm:text-xl md:pt-[6%]">
+            <p>At Friendly Entertainment, we believe great partnerships make great stories. Our approach with clients is just like our name – friendly, collaborative, and full of good energy — but what we deliver is world-class.</p>
+          </Reveal>
+        </div>
       </section>
 
       <section aria-label="Team" className="px-2">

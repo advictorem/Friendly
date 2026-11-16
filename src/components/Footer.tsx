@@ -14,6 +14,12 @@ export function Credits({ className = '' }: { className?: string }) {
   )
 }
 
+const CERTS = [
+  ['dbe', 'Certified Disadvantaged Business Enterprise (DBE)'],
+  ['mbe', 'Certified Minority Business Enterprise (MBE)'],
+  ['sbe', 'Certified Small Business Enterprise (SBE)'],
+] as const
+
 /** Oversized closing footer: invitation, two actions, socials, and a wordmark the width of the viewport. */
 export default function Footer() {
   const { ref, inView } = useInView<HTMLDivElement>('0px 0px -8% 0px')
@@ -27,11 +33,20 @@ export default function Footer() {
             <a href={site.emailHref} className="pill">Drop a line <span className="pill-icon" aria-hidden="true">@</span></a>
           </div>
         </div>
-        <ul className="flex gap-6 text-lg text-white md:flex-col md:gap-1 md:pb-1 md:pr-[8vw] md:text-2xl">
-          {[['Instagram', site.instagram], ['Vimeo', site.vimeo], ['LinkedIn', site.linkedin]].map(([label, href]) => (
-            <li key={label}><a href={href} target="_blank" rel="noreferrer" className="line-link">{label}</a></li>
-          ))}
-        </ul>
+        <div className="flex flex-col gap-8 md:pb-1 md:pr-[8vw]">
+          <ul aria-label="Certifications" className="flex items-center gap-3">
+            {CERTS.map(([file, label]) => (
+              <li key={file}>
+                <img src={`${import.meta.env.BASE_URL}images/certs/${file}.svg`} alt={label} title={label} width={56} height={56} loading="lazy" className="h-12 w-12 opacity-35 md:h-14 md:w-14" />
+              </li>
+            ))}
+          </ul>
+          <ul className="flex gap-6 text-lg text-white md:flex-col md:gap-1 md:text-2xl">
+            {[['Instagram', site.instagram], ['Vimeo', site.vimeo], ['LinkedIn', site.linkedin]].map(([label, href]) => (
+              <li key={label}><a href={href} target="_blank" rel="noreferrer" className="line-link">{label}</a></li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <InstagramReel />
