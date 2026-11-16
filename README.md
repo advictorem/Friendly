@@ -71,3 +71,7 @@ See `CONTENT-AUDIT.md` for what was imported and what is still open.
 
 - **Default:** a snapshot of the 10 latest posts (pinned posts skipped), stored in `public/images/instagram/` and listed in `src/data/instagram.ts`. To refresh it by hand, replace the images and the list.
 - **Live feed (optional):** create a free feed at [behold.so](https://behold.so) connected to @friendlyfilmworks, copy its JSON feed URL into `INSTAGRAM_FEED_URL` in `src/data/instagram.ts`, and rebuild. The free plan returns up to 6 posts and refreshes daily; paid plans refresh hourly. If the feed fails, the snapshot is shown.
+
+## Case-study photo wall and press tiles
+
+A case study in `src/data/caseStudies.ts` can carry optional `deliverables`, `media` (full-width features alternating with masonry blocks; stills or short muted `.mp4` loops) and `press` ("Featured in" tiles). Toma El Juego uses all three; its files are in `public/images/toma/` and `public/images/press/`. Case studies without them fall back to the credit rows and film only.
