@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import MediaCarousel from '../components/MediaCarousel'
 import PortfolioCard from '../components/PortfolioCard'
 import { Reveal, RevealLines } from '../components/Reveal'
-import { caseStudies, caseStudyBySlug } from '../data/caseStudies'
+import VideoPreview from '../components/VideoPreview'
+import { caseStudies, caseStudyBySlug, type MediaItem } from '../data/caseStudies'
+import { prefersReducedMotion } from '../hooks/motion'
 import { projectByVimeoId, type Project } from '../data/projects'
 import { useSeo } from '../hooks/useSeo'
 import NotFound from './NotFound'
@@ -21,6 +23,85 @@ function Film({ vimeoId, title, poster }: { vimeoId: string; title: string; post
           <span className="label absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-black/40 text-lg text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-black">Play</span>
         </button>
       )}
+    </div>
+  )
+}
+
+/** True while the element is on (or near) screen. */
+function useOnScreen<T extends HTMLElement>(margin = '200px 0px') {
+  const ref = useRef<T>(null)
+  const [on, setOn] = useState(false)
+  useEffect(() => {
+    if (!ref.current) return
+    const io = new IntersectionObserver(([e]) => setOn(e.isIntersecting), { rootMargin: margin })
+    io.observe(ref.current)
+    return () => io.disconnect()
+  }, [margin])
+  return { ref, on }
+}
+
+/** Short film that plays muted on a loop while on screen. No controls: it reads as a moving still. */
+function LoopFilm({ vimeoId, poster, title }: { vimeoId: string; poster: string; title: string }) {
+  const { ref, on } = useOnScreen<HTMLDivElement>()
+  return (
+    <div ref={ref} role="img" aria-label={title} className="relative aspect-video w-full overflow-hidden rounded-[14px] bg-card">
+      <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      {on && !prefersReducedMotion() && <VideoPreview vimeoId={vimeoId} loopSeconds={0} cover="h-[102%] w-[102%]" />}
+    </div>
+  )
+}
+
+/** One tile of the photo wall: a still, or a silent looping clip that only plays while visible. */
+function MediaTile({ item, eager = false, fill = false }: { item: MediaItem; eager?: boolean; fill?: boolean }) {
+  const { ref, on } = useOnScreen<HTMLDivElement>('100px 0px')
+  const video = useRef<HTMLVideoElement>(null)
+  useEffect(() => {
+    const v = video.current
+    if (!v) return
+    if (on && !prefersReducedMotion()) v.play().catch(() => {})
+    else v.pause()
+  }, [on])
+  return (
+    <div ref={ref} className={`overflow-hidden rounded-[14px] bg-card ${fill ? 'grow' : ''}`} style={{ aspectRatio: `${item.w} / ${item.h}` }}>
+      {item.video ? (
+        <video ref={video} src={on || eager ? item.video : undefined} poster={item.src} muted loop playsInline preload="none" aria-label={item.alt} className="h-full w-full object-cover" />
+      ) : (
+        <img src={item.src} alt={item.alt} width={item.w} height={item.h} loading={eager ? 'eager' : 'lazy'} decoding="async" className="h-full w-full object-cover" />
+      )}
+    </div>
+  )
+}
+
+/**
+ * Masonry block. Tiles go, in order, into whichever column is currently shortest (three columns on desktop,
+ * two below). The last tile in each column stretches to a shared bottom edge so the block ends flush.
+ */
+function Masonry({ items }: { items: MediaItem[] }) {
+  const [count, setCount] = useState(3)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const apply = () => setCount(mq.matches ? 3 : 2)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+  const cols: MediaItem[][] = Array.from({ length: count }, () => [])
+  const heights = new Array(count).fill(0)
+  items.forEach((item) => {
+    const i = heights.indexOf(Math.min(...heights))
+    cols[i].push(item)
+    heights[i] += item.h / item.w
+  })
+  return (
+    <div className="flex gap-2">
+      {cols.map((col, c) => (
+        <div key={c} className="flex min-w-0 flex-1 flex-col gap-2">
+          {col.map((item, i) => {
+            const last = i === col.length - 1
+            return <Reveal key={item.src} className={last ? 'flex grow flex-col' : ''}><MediaTile item={item} fill={last} /></Reveal>
+          })}
+        </div>
+      ))}
     </div>
   )
 }
@@ -54,50 +135,107 @@ export default function ProjectDetail() {
         <div className="mt-10 sm:mt-16"><MediaCarousel images={study.gallery} label={`${study.client}, ${study.title}`} /></div>
       </section>
 
-      <Reveal as="section" className="gutter py-20 sm:py-28">
-        <dl className="mx-auto grid w-fit grid-cols-[auto_auto] gap-x-4 gap-y-2 text-left">
-          {credits.map(([k, v]) => (
-            <div key={k} className="contents">
-              <dt className="label text-right text-base text-white">{k}</dt>
-              <dd className="max-w-[46ch] text-base text-soft">{v}</dd>
-            </div>
+      {/* Facts, then the three copy sections side by side */}
+      <section className="gutter pb-16 pt-20 sm:pb-24 sm:pt-28">
+        <Reveal>
+          {study.deliverables ? (
+            <dl className="grid gap-x-10 gap-y-6 border-t border-line pt-6 md:grid-cols-3">
+              <div>
+                <dt className="meta">Client</dt>
+                <dd className="label mt-2 text-2xl text-white">{study.credits.client ?? study.client}</dd>
+              </div>
+              <div className="md:col-span-2">
+                <dt className="meta">Deliverables</dt>
+                <dd className="mt-2">
+                  <ul className="label flex flex-wrap gap-x-8 gap-y-1 text-2xl text-white">
+                    {study.deliverables.map((d) => <li key={d}>{d}</li>)}
+                  </ul>
+                </dd>
+              </div>
+            </dl>
+          ) : (
+            <dl className="grid gap-x-10 gap-y-6 border-t border-line pt-6 sm:grid-cols-2 md:grid-cols-3">
+              {credits.map(([k, v]) => (
+                <div key={k}>
+                  <dt className="meta">{k}</dt>
+                  <dd className="mt-2 text-base text-soft">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </Reveal>
+
+        <div className="mt-14 grid gap-x-10 gap-y-12 border-t border-line pt-6 sm:mt-20 md:grid-cols-3">
+          {sections.map(([heading, paras], i) => (
+            <Reveal key={heading} delay={i * 2}>
+              <h2 className="label text-2xl text-white">{heading}</h2>
+              <div className="mt-4 max-w-[46ch] space-y-4 text-[17px] leading-relaxed text-soft">{paras.map((p) => <p key={p}>{p}</p>)}</div>
+            </Reveal>
           ))}
-        </dl>
-      </Reveal>
+        </div>
+      </section>
 
       {study.vimeoId && (
-        <Reveal as="section" className="gutter">
-          <Film vimeoId={study.vimeoId} title={main ? `${main.client} — ${main.title}` : study.title} poster={study.hero} />
+        <Reveal as="section" className="px-2">
+          {study.loop
+            ? <LoopFilm vimeoId={study.vimeoId} poster={study.filmPoster ?? study.hero} title={`${study.client}, ${study.title} film`} />
+            : <Film vimeoId={study.vimeoId} title={main ? `${main.client} — ${main.title}` : study.title} poster={study.hero} />}
         </Reveal>
       )}
 
-      <section className="gutter mx-auto max-w-[680px] space-y-14 py-24 text-center sm:py-32">
-        {sections.map(([heading, paras]) => (
-          <Reveal key={heading}>
-            <h2 className="label text-2xl text-white">{heading}</h2>
-            <div className="mt-4 space-y-4 text-lg leading-relaxed text-soft">{paras.map((p) => <p key={p}>{p}</p>)}</div>
-          </Reveal>
-        ))}
-      </section>
+      {/* Photo wall: full-width features alternating with masonry blocks */}
+      {study.media && (
+        <section aria-label={`${study.title} photography and clips`} className="space-y-2 px-2 pt-2">
+          {study.media.map((block, i) => 'feature' in block ? (
+            <Reveal key={i}><MediaTile item={block.feature} /></Reveal>
+          ) : (
+            <Masonry key={i} items={block.masonry} />
+          ))}
+        </section>
+      )}
+
+      {study.press && (
+        <section className="px-2 pt-28 sm:pt-40">
+          <RevealLines as="h2" className="display flat mb-10 text-center text-[clamp(40px,6vw,104px)] text-white sm:mb-14" lines={['Featured in']} />
+          <ul className="grid gap-2 md:grid-cols-3">
+            {study.press.map((p, i) => (
+              <Reveal as="li" key={p.href} delay={i * 2}>
+                <a href={p.href} target="_blank" rel="noreferrer" aria-label={`${p.outlet}: ${p.title} (opens in a new tab)`} className="group flex h-full flex-col rounded-[14px] bg-card p-1">
+                  <div className="relative aspect-[171/100] overflow-hidden rounded-[11px] bg-black">
+                    <img src={p.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 ease-cine group-hover:scale-[1.04]" />
+                    <span aria-hidden="true" className="absolute inset-0 bg-black/20" />
+                    <img src={p.logo} alt={p.outlet} style={{ width: p.logoWidth }} className="absolute left-1/2 top-1/2 h-auto max-h-[34%] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]" />
+                  </div>
+                  <div className="px-4 pb-5 pt-5 sm:px-5">
+                    <h3 className="label text-[22px] leading-[1.15] text-white">{p.title}</h3>
+                    <p className="meta mt-2">{p.outlet}</p>
+                  </div>
+                </a>
+              </Reveal>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {films.length > 0 && (
-        <section aria-label="More films from this campaign" className="px-2 pb-24">
+        <section aria-label="More films from this campaign" className="px-2 pb-24 pt-24 sm:pt-32">
           <h2 className="display mb-10 text-center text-[clamp(36px,5vw,80px)] text-white">More from the campaign</h2>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">{films.map((p) => <PortfolioCard key={p.id} project={{ ...p, caseStudy: undefined }} />)}</div>
         </section>
       )}
 
-      <section className="gutter py-24 text-center">
-        <h2 className="display text-[clamp(44px,6.4vw,110px)] text-white">Other projects</h2>
-        <ul className="mx-auto mt-12 grid max-w-[900px] gap-2 sm:grid-cols-2">
+      {/* More work: tiles overlap the lower part of an oversized, dimmed heading */}
+      <section className="gutter pb-24 pt-28 text-center sm:pt-40">
+        <h2 className="display flat text-[clamp(72px,12.5vw,300px)] leading-[0.9] text-[#333]">More work</h2>
+        <ul className="relative z-10 mx-auto -mt-[clamp(14px,2.4vw,58px)] grid max-w-[1125px] gap-2 sm:grid-cols-2">
           {others.map((c) => (
             <li key={c.slug}>
               <Link to={`/work/${c.slug}`} className="roll-host group block rounded-[14px] bg-card p-1 text-left">
                 <div className="aspect-[11/10] overflow-hidden rounded-[11px]">
                   <img src={c.hero} alt={`${c.client}, ${c.title}`} loading="lazy" className="h-full w-full object-cover grayscale transition-[filter,transform] duration-700 ease-cine group-hover:scale-[1.03] group-hover:grayscale-0" />
                 </div>
-                <div className="px-4 pb-4 pt-5">
-                  <h3 className="label text-lg text-white"><span className="roll"><span>{c.title}</span><span aria-hidden="true">{c.title}</span></span></h3>
+                <div className="px-4 pb-4 pt-5 sm:px-5 sm:pb-5">
+                  <h3 className="label text-xl text-white"><span className="roll"><span>{c.title}</span><span aria-hidden="true">{c.title}</span></span></h3>
                   <p className="meta mt-1">{c.client}</p>
                 </div>
               </Link>
