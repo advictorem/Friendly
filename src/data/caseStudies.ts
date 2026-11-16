@@ -2,8 +2,10 @@ import { asset, wp, vimeoThumb } from './assets'
 
 /** One tile in a case study's photo wall. `w`/`h` are the file's pixel size, used to reserve space before it loads. */
 export interface MediaItem { src: string; alt: string; w: number; h: number; video?: string }
-/** The photo wall alternates full-width feature images with masonry blocks. */
-export type MediaBlock = { feature: MediaItem } | { masonry: MediaItem[] }
+/** A tile placed on the 12-column desktop grid: `start` is its first column, `span` how many it covers. */
+export type Placed = MediaItem & { start: number; span: number }
+/** The gallery is a sequence of edge-to-edge images and loosely composed rows with empty columns left as breathing room. */
+export type MediaBlock = { full: MediaItem } | { row: Placed[]; align?: 'start' | 'center' | 'end' }
 export interface PressItem { outlet: string; title: string; href: string; image: string; logo: string; logoWidth: string }
 
 export interface CaseStudy {
@@ -43,6 +45,7 @@ export interface CaseStudy {
 const toma = (name: string) => asset(`images/toma/${name}`)
 const photo = (name: string, alt: string, w = 1200, h = 800): MediaItem => ({ src: toma(`${name}.webp`), alt, w, h })
 const clip = (name: string, alt: string): MediaItem => ({ src: toma(`${name}-poster.webp`), video: toma(`${name}.mp4`), alt, w: 540, h: 960 })
+const at = (start: number, span: number, item: MediaItem): Placed => ({ ...item, start, span })
 const press = (file: string) => asset(`images/press/${file}`)
 const lafc = (name: string) => wp(`2025/10/${name}-1024x683.jpg`)
 
@@ -70,32 +73,44 @@ export const caseStudies: CaseStudy[] = [
       'A library of photography, video, graphics and social content that carried the launch across Nike’s social and digital channels, with one message: creativity and self-expression belong at the heart of the game.',
     ],
     media: [
-      { feature: photo('travis-scott-mic', 'Travis Scott with a microphone, laughing in the middle of the Toma crowd', 2000, 1400) },
-      { masonry: [
-        photo('vini-jr', 'Vini Jr. in a blue Nike 90 jersey', 1200, 1500),
-        photo('trio', 'Three players posing between green shipping containers', 1200, 1501),
-        clip('dance', 'Dancers in Toma jerseys performing in front of a poster wall'),
-        photo('booth', 'Two guests posing at the Toma customisation booth'),
-        photo('hand-sign', 'Hands making an LA sign over a Toma jersey'),
-        photo('vini-jr-travis-scott', 'Vini Jr. and Travis Scott side by side', 1200, 1500),
-        clip('freestyle', 'A freestyler balancing a ball in front of a poster wall'),
-        photo('street-motion', 'Players sprinting across a volt-yellow street court, blurred by motion', 1200, 801),
-        photo('travis-scott', 'Travis Scott cheering among fans', 1200, 840),
-        photo('luchador', 'A masked luchador holding up a 626 flag', 1200, 798),
+      { full: photo('travis-scott-mic', 'Travis Scott with a microphone, laughing in the middle of the Toma crowd', 2000, 1400) },
+      { align: 'end', row: [
+        at(1, 5, photo('vini-jr', 'Vini Jr. in a blue Nike 90 jersey', 1200, 1500)),
+        at(9, 3, clip('freestyle', 'A freestyler balancing a ball in front of a poster wall')),
       ] },
-      { feature: photo('night-ring', 'Teams lined up around the lit court at night, seen from the stands', 2000, 1327) },
-      { masonry: [
-        clip('portrait-loop', 'Black-and-white portrait of a player with the Toma logo'),
-        photo('ronaldinho-10', 'Black-and-white shot of a fan in a Ronaldinho 10 jersey', 1200, 1501),
-        photo('portrait-bw', 'Black-and-white portrait of a player in a Toma jersey', 1200, 1500),
-        photo('team-celebration', 'A youth team celebrating together after a match'),
-        photo('jersey', 'Black-and-white detail of the back of a Toma jersey'),
-        clip('team-loop', 'A team dancing together in matching jerseys'),
-        photo('fence-bw', 'Black-and-white action shot through the cage fence'),
-        photo('breakdance', 'A breakdancer mid-freeze against a wall of Toma posters', 1200, 1500),
-        photo('match', 'A player on the ball during a match on the yellow court'),
+      { row: [at(3, 8, photo('street-motion', 'Players sprinting across a volt-yellow street court, blurred by motion', 1200, 801))] },
+      { align: 'center', row: [
+        at(2, 4, photo('trio', 'Three players posing between green shipping containers', 1200, 1501)),
+        at(7, 6, photo('travis-scott', 'Travis Scott cheering among fans', 1200, 840)),
       ] },
-      { feature: photo('flag', 'A red flag waving over the crowd at night', 2000, 1297) },
+      { align: 'end', row: [
+        at(1, 3, clip('dance', 'Dancers in Toma jerseys performing in front of a poster wall')),
+        at(6, 7, photo('luchador', 'A masked luchador holding up a 626 flag', 1200, 798)),
+      ] },
+      { full: photo('night-ring', 'Teams lined up around the lit court at night, seen from the stands', 2000, 1327) },
+      { align: 'start', row: [
+        at(1, 6, photo('hand-sign', 'Hands making an LA sign over a Toma jersey')),
+        at(9, 4, photo('vini-jr-travis-scott', 'Vini Jr. and Travis Scott side by side', 1200, 1500)),
+      ] },
+      { align: 'end', row: [
+        at(2, 4, photo('breakdance', 'A breakdancer mid-freeze against a wall of Toma posters', 1200, 1500)),
+        at(7, 5, photo('booth', 'Two guests posing at the Toma customisation booth')),
+      ] },
+      { align: 'end', row: [
+        at(1, 3, clip('portrait-loop', 'Black-and-white portrait of a player with the Toma logo')),
+        at(5, 5, photo('portrait-bw', 'Black-and-white portrait of a player in a Toma jersey', 1200, 1500)),
+        at(10, 3, photo('ronaldinho-10', 'Black-and-white shot of a fan in a Ronaldinho 10 jersey', 1200, 1501)),
+      ] },
+      { align: 'end', row: [
+        at(1, 7, photo('fence-bw', 'Black-and-white action shot through the cage fence')),
+        at(9, 4, photo('jersey', 'Black-and-white detail of the back of a Toma jersey')),
+      ] },
+      { row: [at(4, 6, photo('team-celebration', 'A youth team celebrating together after a match'))] },
+      { align: 'end', row: [
+        at(2, 3, clip('team-loop', 'A team dancing together in matching jerseys')),
+        at(6, 7, photo('match', 'A player on the ball during a match on the yellow court')),
+      ] },
+      { full: photo('flag', 'A red flag waving over the crowd at night', 2000, 1297) },
     ],
     press: [
       { outlet: 'Hypebeast', title: 'Nike’s Toma LA Soccer Tournament Heads to the Finals', href: 'https://hypebeast.com/2025/7/nike-toma-la-street-soccer-tournament-championship-game-los-angeles-events-el-juego', image: press('hypebeast.webp'), logo: press('hypebeast-logo.svg'), logoWidth: '70%' },

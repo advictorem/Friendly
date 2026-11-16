@@ -52,7 +52,7 @@ function LoopFilm({ vimeoId, poster, title }: { vimeoId: string; poster: string;
 }
 
 /** One tile of the photo wall: a still, or a silent looping clip that only plays while visible. */
-function MediaTile({ item, eager = false, fill = false }: { item: MediaItem; eager?: boolean; fill?: boolean }) {
+function MediaTile({ item, eager = false }: { item: MediaItem; eager?: boolean }) {
   const { ref, on } = useOnScreen<HTMLDivElement>('100px 0px')
   const video = useRef<HTMLVideoElement>(null)
   useEffect(() => {
@@ -62,7 +62,7 @@ function MediaTile({ item, eager = false, fill = false }: { item: MediaItem; eag
     else v.pause()
   }, [on])
   return (
-    <div ref={ref} className={`overflow-hidden rounded-[14px] bg-card ${fill ? 'grow' : ''}`} style={{ aspectRatio: `${item.w} / ${item.h}` }}>
+    <div ref={ref} className="overflow-hidden rounded-[14px] bg-card" style={{ aspectRatio: `${item.w} / ${item.h}` }}>
       {item.video ? (
         <video ref={video} src={on || eager ? item.video : undefined} poster={item.src} muted loop playsInline preload="none" aria-label={item.alt} className="h-full w-full object-cover" />
       ) : (
@@ -72,39 +72,8 @@ function MediaTile({ item, eager = false, fill = false }: { item: MediaItem; eag
   )
 }
 
-/**
- * Masonry block. Tiles go, in order, into whichever column is currently shortest (three columns on desktop,
- * two below). The last tile in each column stretches to a shared bottom edge so the block ends flush.
- */
-function Masonry({ items }: { items: MediaItem[] }) {
-  const [count, setCount] = useState(3)
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)')
-    const apply = () => setCount(mq.matches ? 3 : 2)
-    apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
-  }, [])
-  const cols: MediaItem[][] = Array.from({ length: count }, () => [])
-  const heights = new Array(count).fill(0)
-  items.forEach((item) => {
-    const i = heights.indexOf(Math.min(...heights))
-    cols[i].push(item)
-    heights[i] += item.h / item.w
-  })
-  return (
-    <div className="flex gap-2">
-      {cols.map((col, c) => (
-        <div key={c} className="flex min-w-0 flex-1 flex-col gap-2">
-          {col.map((item, i) => {
-            const last = i === col.length - 1
-            return <Reveal key={item.src} className={last ? 'flex grow flex-col' : ''}><MediaTile item={item} fill={last} /></Reveal>
-          })}
-        </div>
-      ))}
-    </div>
-  )
-}
+/** Wider side padding for case-study copy and gallery rows, so content sits well inside the browser edge. */
+const PAD = 'px-[clamp(22px,6vw,128px)]'
 
 export default function ProjectDetail() {
   const { slug } = useParams()
@@ -135,37 +104,37 @@ export default function ProjectDetail() {
         <div className="mt-10 sm:mt-16"><MediaCarousel images={study.gallery} label={`${study.client}, ${study.title}`} /></div>
       </section>
 
-      {/* Facts, then the three copy sections side by side */}
-      <section className="gutter pb-16 pt-20 sm:pb-24 sm:pt-28">
+      {/* Facts (secondary, centred), then the three copy sections side by side */}
+      <section className={`${PAD} pb-20 pt-20 sm:pb-28 sm:pt-28`}>
         <Reveal>
           {study.deliverables ? (
-            <dl className="grid gap-x-10 gap-y-6 border-t border-line pt-6 md:grid-cols-3">
+            <dl className="mx-auto flex max-w-[420px] flex-col items-center gap-8 text-center">
               <div>
                 <dt className="meta">Client</dt>
-                <dd className="label mt-2 text-2xl text-white">{study.credits.client ?? study.client}</dd>
+                <dd className="label mt-2 text-lg text-white">{study.credits.client ?? study.client}</dd>
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <dt className="meta">Deliverables</dt>
                 <dd className="mt-2">
-                  <ul className="label flex flex-wrap gap-x-8 gap-y-1 text-2xl text-white">
+                  <ul className="label space-y-1 text-lg text-white">
                     {study.deliverables.map((d) => <li key={d}>{d}</li>)}
                   </ul>
                 </dd>
               </div>
             </dl>
           ) : (
-            <dl className="grid gap-x-10 gap-y-6 border-t border-line pt-6 sm:grid-cols-2 md:grid-cols-3">
+            <dl className="mx-auto flex max-w-[560px] flex-col items-center gap-6 text-center">
               {credits.map(([k, v]) => (
                 <div key={k}>
                   <dt className="meta">{k}</dt>
-                  <dd className="mt-2 text-base text-soft">{v}</dd>
+                  <dd className="mt-2 text-[15px] text-soft">{v}</dd>
                 </div>
               ))}
             </dl>
           )}
         </Reveal>
 
-        <div className="mt-14 grid gap-x-10 gap-y-12 border-t border-line pt-6 sm:mt-20 md:grid-cols-3">
+        <div className="mt-20 grid gap-x-[clamp(28px,4vw,72px)] gap-y-12 border-t border-line pt-10 sm:mt-28 md:grid-cols-3">
           {sections.map(([heading, paras], i) => (
             <Reveal key={heading} delay={i * 2}>
               <h2 className="label text-2xl text-white">{heading}</h2>
@@ -183,13 +152,24 @@ export default function ProjectDetail() {
         </Reveal>
       )}
 
-      {/* Photo wall: full-width features alternating with masonry blocks */}
+      {/* Gallery: edge-to-edge images alternating with loosely composed rows that leave columns empty */}
       {study.media && (
-        <section aria-label={`${study.title} photography and clips`} className="space-y-2 px-2 pt-2">
-          {study.media.map((block, i) => 'feature' in block ? (
-            <Reveal key={i}><MediaTile item={block.feature} /></Reveal>
+        <section aria-label={`${study.title} photography and clips`} className="space-y-[clamp(48px,9vw,168px)] pt-[clamp(48px,9vw,168px)]">
+          {study.media.map((block, i) => 'full' in block ? (
+            <Reveal key={i} className="px-2"><MediaTile item={block.full} /></Reveal>
           ) : (
-            <Masonry key={i} items={block.masonry} />
+            <div key={i} className={`${PAD} grid grid-cols-6 gap-x-[clamp(12px,2.4vw,40px)] gap-y-6 md:grid-cols-12 ${block.align === 'end' ? 'md:items-end' : block.align === 'center' ? 'md:items-center' : 'md:items-start'}`}>
+              {block.row.map((item, n) => {
+                const tall = item.h > item.w
+                // Phones: wide shots fill the row; tall ones take two-thirds, alternating sides.
+                const mobile = tall ? `col-span-4 ${(i + n) % 2 ? 'col-start-3' : 'col-start-1'}` : 'col-span-6'
+                return (
+                  <Reveal key={item.src} delay={n * 2} className={`${mobile} md:[grid-column:var(--col)]`} style={{ ['--col' as string]: `${item.start} / span ${item.span}` }}>
+                    <MediaTile item={item} />
+                  </Reveal>
+                )
+              })}
+            </div>
           ))}
         </section>
       )}

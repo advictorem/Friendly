@@ -14,7 +14,7 @@ export function RevealLines({ lines, as: Tag = 'h2', className = '', immediate =
 }
 
 /** Fades its children up when they enter the viewport. */
-export function Reveal({ children, className = '', delay = 0, as: Tag = 'div' }: { children: ReactNode; className?: string; delay?: number; as?: ElementType }) {
+export function Reveal({ children, className = '', delay = 0, as: Tag = 'div', style }: { children: ReactNode; className?: string; delay?: number; as?: ElementType; style?: CSSProperties }) {
   const { ref, inView } = useInView<HTMLElement>()
-  return <Tag ref={ref} className={`fade-up ${inView ? 'is-in' : ''} ${className}`} style={{ '--i': delay } as CSSProperties}>{children}</Tag>
+  return <Tag ref={ref} className={`fade-up ${inView ? 'is-in' : ''} ${className}`} style={{ '--i': delay, ...style } as CSSProperties}>{children}</Tag>
 }
